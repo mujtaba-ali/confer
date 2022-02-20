@@ -1,0 +1,31 @@
+{% extends "sublayout.html" %}
+
+
+{% block body %}
+<div class="complete">
+    <div class="sub-title-div">
+        <h1 class="sub-title">{{ subject }}</h1>
+    </div>
+    <div class="search-bar">
+        <form class="d-flex" action="/search" method="post">
+            <input class="ques-search form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-info" type="submit">Search</button>
+          </form>
+    </div>
+    <div class="questions">
+
+        {% for question in questions %}
+        <a href="/{{question.sub}}/{{question.id}}">
+            <div class="question">
+                {{ question.title }}
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+    <a href="/add">
+    <div class="add">
+        +
+    </div></a>
+</div>
+{% endblock %}

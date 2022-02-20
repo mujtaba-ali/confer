@@ -1,0 +1,36 @@
+{% extends 'sublayout.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/addq.css">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="form_design">
+            <h2 style="color: white;">Post a Question</h2>
+            <form action="/add" method="post" enctype="multipart/form-data">
+                <input class="form-control" type="text" name="title" id="1" placeholder="Add a title for the Question">
+                <br>
+                <textarea class="form-control" name="desc" rows="3" placeholder="Describe the question"></textarea>
+                <br>
+                <label for="form_select" style="color: white;">Choose a Subject:</label>
+                <select id="form_select" name="sub" class="form-select" aria-label="Default select example" required>
+                    <option value="AI">AI</option>
+                    <option value="ALC">ALC</option>
+                    <option value="BCT">BCT</option>
+                    <option value="DA">DA</option>
+                    <option value="IRS">IRS</option>
+                    <option value="SE">SE</option>
+                    <option value="OS">OS</option>
+                    <option value="WIT">WIT</option>
+                </select>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Add Attachments</label>
+                    <input name="file" class="form-control" type="file" id="formFile" multiple accept="image/*">
+                </div>
+                <input type="submit" value="Submit!">
+            </form>
+        </div>
+    </div>
+{% endblock %}

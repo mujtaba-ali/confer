@@ -1,0 +1,48 @@
+.right {
+    color: white;
+    margin-left: 17%;
+    padding: 30px;
+}
+
+
+img {
+    width: 20%;
+    margin: 10px;
+    margin-top: 50px;
+}
+
+.inl {
+    display: inline;
+}
+
+.disc {
+    margin-top: 50px;
+}
+
+.author {
+    text-align: right;
+}
+
+.ans {
+    border: 1px solid #cfe2ff;
+    border-radius: 20px;
+    /* padding: 10px 30px; */
+    margin: 20px 30px;
+}
+
+.votes {
+    padding: 25px 0 15px 20px;
+}
+
+.reply {
+    padding: 10px 5px;
+}
+
+#correct {
+    text-align: right;
+}
+
+.upv {
+    height: 100%;
+    width: 20%;
+}
