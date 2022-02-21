@@ -77,17 +77,22 @@ def login():
         print(user)
 
         if log is not None:
+            if password == "" and username == "" and email == "":
+                return render_template('login.html', message="Enter all credentials")
+
             if username != "":
                 user = UserModel.query.filter_by(username=username).first()
 
             elif email != "":
                 user = UserModel.query.filter_by(email = email).first()
+            else:
+                return render_template('login.html', message='Account does not exist')
 
             if user is not None and user.check_pass_hash(password):
                 login_user(user)
                 return redirect('/')
-                # return render_template('login.html', message='Incorrect Password')
-            return render_template('login.html', message='Account does not exist')
+            else:
+                return render_template('login.html', message='Incorrect Username or Password')
         
         else:
             mail_match = re.search("[0-9]+@mjcollege.ac.in", email)
@@ -106,7 +111,7 @@ def login():
                     # login_user(user)
                     return render_template('validate.html', info=[username, email, password])
                 return render_template("login.html", message='credentials')
-            return render_template("login.html", message="Create with College Mail Only")
+            return render_template("login.html", message="Enter the right credentials")
     
     return render_template("login.html")
 
@@ -134,12 +139,12 @@ def validate():
     return render_template('validate.html')
 
 
-@app.route('/<subject>')
+@app.route('/<subject>') #/ai -> subject = ai
+@login_required
 def sub(subject):
     questions = Question.query.filter_by(sub=subject.upper()).order_by(Question.created_on.desc())
 
-    for i in questions:
-        print(i.title)
+    subject = subject.lower()
 
     sub_dict = {
         'ai': 'Artificial Intelligence',
@@ -156,14 +161,16 @@ def sub(subject):
     return "404 Page not found"
 
 @app.route('/<subject>/<id>')
+@login_required
 def discussions(subject, id):
     question = Question.query.filter_by(id=id).first()
     images = Image.query.filter_by(qid=id)
     comments = Comment.query.filter_by(qid=id)
 
-    return render_template('discussions.html', question=question, images=images, comments=comments)
+    return render_template('discussions.html', question=question, images=images, comments=comments, subject=subject)
 
 @app.route('/add', methods=["POST", "GET"])
+@login_required
 def add():
     if request.method == "POST":
         title = request.form["title"]
@@ -193,6 +200,7 @@ def add():
     return render_template("add.html")
 
 @app.route("/<subject>/<id>/comment", methods=["POST"])
+@login_required
 def add_comment(subject, id):
     reply = request.form["comment"]
     comment = Comment(qid=id, cmt=reply, username=current_user.username)
@@ -201,6 +209,7 @@ def add_comment(subject, id):
     return redirect(f"/{subject}/{id}")
 
 @app.route("/search", methods=["POST"])
+@login_required
 def search():
     query = request.form["q"]
 
@@ -214,3 +223,12 @@ def search():
         if match:
             search_results.append(i)
     return render_template("sub.html", questions=search_results)
+
+@app.route("/delete/<sub>/<id>")
+@login_required
+def delete(sub, id):
+    question = Question.query.filter_by(id=id).first()
+    db.session.delete(question)
+    db.session.commit()
+    return redirect(f"/{sub}")
+

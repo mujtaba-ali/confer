@@ -6,8 +6,11 @@
 
 {% block body %}
 <div class="complete">
-    <h2> {{question.title}} </h2>
-    <h6> {{question.description}} </h6>
+    {% if current_user.username == question.username %}
+        <a href="/delete/{{question.sub}}/{{question.id}}" data-toggle="tooltip" data-placement="top" title="Delete Post" class="btn btn-outline-danger trash">❌</a>
+    {% endif %}
+    <h2> {{question.title}} ({{subject}})</h2>
+    <h5> {{question.description}} </h5>
 
     {% for image in images %}
 <div id="images">
@@ -28,7 +31,7 @@
         {% if current_user.is_authenticated %}
         <form action="/{{question.sub}}/{{question.id}}/comment" method="post">
             <input class="form-control" style="width: 95%; height: 50px; margin: 20px 30px;" type="text" name="comment" placeholder="Reply with a comment" required>
-            <input class="btn btn-primary" style="margin-left: 30px;" type="submit" value="Post">
+            <input class="btn btn-outline-info" style="margin-left: 30px;" type="submit" value="Post">
         </form>
         {% endif %}
     </div>
